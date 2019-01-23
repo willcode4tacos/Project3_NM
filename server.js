@@ -1,14 +1,11 @@
 const express = require("express");
 const app = express();
-const path = require('path');
-const nodeMailer = require('nodemailer');
-const  bodyParser = require('body-parser');
 const session = require('express-session')
 const dbConnection = require('./models') 
 const MongoStore = require('connect-mongo')(session) //MAY NEED THIS TO STORE SESSIONS
 const passport = require('./passport');
 const mongoose = require("mongoose");
-const routes = require("./routes/api");
+const routes = require("./routes");
 const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

@@ -2,6 +2,7 @@ const router = require("express").Router();
 // const UserController = require("../../controllers/usercontroller");
 const passport = require('../passport')
 const User = require('../models/user')
+let CurrentUser = {};
 
 // // Matches with "/api/User"
 // router.route("/")
@@ -18,7 +19,7 @@ const User = require('../models/user')
   router.post('/', (req, res) => {
     console.log('user signup');
 
-    const { username, password, contractor, email } = req.body
+    const { username, password, contractor, email, first_name, last_name, street, city, zipcode, phone, business } = req.body
     // ADD VALIDATION
     User.findOne({ username: username }, (err, user) => {
         if (err) {
@@ -34,6 +35,13 @@ const User = require('../models/user')
                 password: password,
                 contractor: contractor,
                 email: email,
+                first_name: first_name,
+                last_name: last_name,
+                street: street,
+                city: city,
+                zipcode: zipcode,
+                phone: phone,
+                business: business
             })
             newUser.save((err, savedUser) => {
                 if (err) return res.json(err)
@@ -52,7 +60,8 @@ router.post(
     },
     passport.authenticate('local'),
     (req, res) => {
-        console.log('logged in', req.user);
+        console.log('logged innnnnnn', req.user);
+        CurrentUser = req.user;
         var userInfo = {
             username: req.user.username
         };
@@ -62,9 +71,12 @@ router.post(
 
 router.get('/', (req, res, next) => {
     console.log('===== user!!======')
+    
     console.log(req.user)
+    console.log('===== CURRENT USER ======')
+    console.log(CurrentUser)
     if (req.user) {
-        res.json({ user: req.user })
+        res.json({ CurrentUser })
     } else {
         res.json({ user: null })
     }
@@ -89,6 +101,7 @@ router.get("/allusers", function(req, res) {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   })
-  
+
+
 
 module.exports = router;
