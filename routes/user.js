@@ -4,7 +4,7 @@ const passport = require('../passport')
 const User = require('../models/user')
 let CurrentUser = {};
 
-// // Matches with "/api/User"
+// // Matches with "/"
 // router.route("/")
 //   .get(UserController.findAll)
 //   //.post(UserController.create);

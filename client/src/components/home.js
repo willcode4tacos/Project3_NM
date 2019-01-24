@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 import Navbar from './navbar'
 import axios from 'axios'
-
+//import Signup from './components/sign-up'
 import Jumbotron from './Jumbotron';
 import { Col, Row, Container } from "./Grid";
 import API from "../utils/API";
@@ -19,10 +19,7 @@ class Home extends Component {
     super()
     this.state = {
       loggedIn: false,
-      username: null,
-      email: null,
-      contractor: null,
-      job: {}
+      username: null
     }
 
     this.getUser = this.getUser.bind(this)
@@ -32,67 +29,31 @@ class Home extends Component {
 
   componentDidMount() {
     this.getUser()
-    API.getJob(this.props.match.params.id)
-      .then(res => this.setState({ job: res.data }))
-      .catch(err => console.log(err));
   }
 
-  updateUser(userObject) {
+  updateUser (userObject) {
     this.setState(userObject)
   }
 
   getUser() {
     axios.get('/user/').then(response => {
-      // console.log('Get user response: ')
-      // console.log("resonse.data: " + response.data)
-      // // console.log(response.data.CurrentUser.email) //still needs more
-      // console.log("response.data.user.CurrentUser: " + response.data.user)
-      if (response.data.CurrentUser) {
+      console.log('Get user response: ')
+      console.log(response.data)
+      if (response.data.user) {
         console.log('Get User: There is a user saved in the server session: ')
-        console.log(response.data)
 
         this.setState({
           loggedIn: true,
-          username: response.data.CurrentUser.username,
-          email: response.data.CurrentUser.email,
-          contractor: response.data.CurrentUser.contractor
-
+          username: response.data.user.username
         })
       } else {
         console.log('Get user: no user');
         this.setState({
           loggedIn: false,
-          username: null,
-          email: null,
-          contractor: null
+          username: null
         })
-
-      } console.log("LOGGED IN STATE")
-      console.log(this.state.loggedIn)
-      console.log("CONTRACTOR STATE")
-      console.log(this.state.contractor)
-
-      if (this.state.loggedIn == true && this.state.contractor == true) {
-        console.log("I AM A CONTRACTOR")
-      } else if (this.state.loggedIn == true && this.state.contractor == false) {
-        console.log("I AM A HOMEOWNER")
-      } else {
-        console.log("I AM NOTHING")
       }
-
     })
-    // console.log("LOGGED IN STATE")
-    // console.log(this.state.loggedIn)
-    // console.log("CONTRACTOR STATE")
-    //     console.log(this.state.contractor)
-
-    //     if (this.state.loggedIn == true && this.state.contractor == true ) {
-    //      console.log("I AM A CONTRACTOR")
-    //     } else if (this.state.loggedIn == true && this.state.contractor == false) {
-    //       console.log("I AM A HOMEOWNER")
-    //     } else {
-    //       console.log("I AM NOTHING")
-    //     }
   }
 
   render() {

@@ -50,14 +50,28 @@ class ContractorSignup extends Component {
 			contractor: true,
 			business: this.state.business
 		})
-			.then(response => {
-				console.log(response)
-				if (!response.data.errmsg) {
-					console.log('successful signup')
-					this.setState({ redirect: true });
+		.then(response => {
+
+			axios.post("iuytfrdfghlkhgfdfghj").then(data => {
+				debugger
+			})
+	
+			axios
+			  .post("/nodemailer/sendemail", {
+				email: this.state.email
+			  })
+			  .then(res => {
+				console.log(res);
+				if (!res.data.errmsg) {
+				  console.log("successful signup");
+				  this.setState({
+					//redirect to login page
+					redirectTo: "/login"
+				  });
 				} else {
-					console.log('username already taken')
+				  console.log("username already taken");
 				}
+			});
 			}).catch(error => {
 				console.log('signup error: ')
 				console.log(error)

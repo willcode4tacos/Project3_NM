@@ -3,6 +3,36 @@ const UserController = require("../../controllers/usercontroller");
 const passport = require('../../passport')
 const User = require('../../models/user')
 const CurrentUser = {};
+const nodeMailer = require('nodemailer');
+
+router.post('/nodemailer/sendemail', function (req, res) {
+    console.log("heyfdsfsgfsdfdsffdsgfsgfsgh");
+    let transporter = nodeMailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'willcode4tacos@gmail.com',
+            pass: 'CodePhila7676'
+        }
+    });
+    let mailOptions = {
+        from: '"Helping Hand" <willcode4tacos@gmail.com>', // sender address
+        to: req.body.email, // list of receivers
+        subject: 'Hello!', // Subject line
+        html: 'Welcome to Helping Hand', // plain text body
+        // html: '<b>NodeJS Email</b>' // html body
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+            res.render('index');
+        });
+    });
+
 
 // Matches with "/api/User"
 // router.route("/")
@@ -17,7 +47,7 @@ const CurrentUser = {};
 //   .put(UserController.update)
 //   .delete(UserController.remove);
 
-  router.post('/', (req, res) => {
+  router.post('/user/', (req, res) => {
     console.log('user signup');
 
     const { username, password } = req.body
@@ -44,7 +74,7 @@ const CurrentUser = {};
 })
 
 router.post(
-    '/login',
+    '/user/login',
     function (req, res, next) {
         console.log('routes/user.js, login, req.body: ');
         console.log(req.body)
@@ -61,7 +91,7 @@ router.post(
     }
 )
 
-router.get('/', (req, res, next) => {
+router.get('/user/', (req, res, next) => {
     console.log('===== user!777777!======')
     console.log(req.user)
     Console.log("CURRENT USER CURRENT USER CURRENT USER")
@@ -75,7 +105,7 @@ router.get('/', (req, res, next) => {
 
 
 
-router.post('/logout', (req, res) => {
+router.post('/user/logout', (req, res) => {
     if (req.user) {
         req.logout()
         res.send({ msg: 'logging out' })
